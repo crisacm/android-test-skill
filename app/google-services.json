@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1063751660389",
+    "project_id": "repositorio-personal",
+    "storage_bucket": "repositorio-personal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063751660389:android:b8f0e8c47dfa7c2489a78c",
+        "android_client_info": {
+          "package_name": "com.github.crisacm.testskills"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063751660389-ru6o3703mucc5rednu58ofln4oe9g6qn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-AyRkmuHIPk6a8F40ilX9uay94pXQ6So"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063751660389-ru6o3703mucc5rednu58ofln4oe9g6qn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

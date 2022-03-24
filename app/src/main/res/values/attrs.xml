@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomRecyclerView">
+        <attr name="setRecyclerViewBackground" format="reference" />
+        <attr name="setEmptyBackground" format="reference" />
+
+        <attr name="setLayoutsHeight" format="dimension"/>
+
+        <attr name="setEmptyText" format="string" />
+    </declare-styleable>
+</resources>

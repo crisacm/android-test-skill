@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Android Test Skills</string>
+    <string name="txt_ver_publicaciones">Ver publicaciones</string>
+    <string name="txt_list_is_empty">¡List is empty!</string>
+    <string name="txt_cargando_espere_un_momento">Cargando, espere un momento...</string>
+</resources>
