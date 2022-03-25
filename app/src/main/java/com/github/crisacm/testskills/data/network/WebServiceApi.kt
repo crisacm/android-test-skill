@@ -12,8 +12,16 @@ interface WebServiceApi {
     @GET(UrlHelper.USERS)
     fun getUsers(): Call<List<UsersResponse?>?>
 
+    @GET(UrlHelper.USERS)
+    fun getUsers2(): List<UsersResponse?>
+
     @GET(UrlHelper.POSTS)
     fun getPostsByUser(
         @Query("userId") id: String
     ): Call<List<PostsResponse?>?>
+
+    @GET(UrlHelper.POSTS)
+    fun getPostsByUser2(
+        @Query("userId") id: String
+    ): List<PostsResponse?>
 }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,19 +13,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.crisacm.testskills.data.database.models.User
-import com.github.crisacm.testskills.data.database.viewModels.UserViewModel
+import com.github.crisacm.testskills.data.database.repositories.UserRepo
+import com.github.crisacm.testskills.data.database.viewModels.MainViewModel
 import com.github.crisacm.testskills.databinding.ActivityMainBinding
 import com.github.crisacm.testskills.ui.dialogs.LoadingDialog
 import com.github.crisacm.testskills.ui.posts.PostsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
-    private val mUserViewModel: UserViewModel by viewModels()
+    private val mMainViewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var mUserRepo: UserRepo
 
     private val finalListUsers: MutableLiveData<List<User>> = MutableLiveData(listOf())
     private var listUsers: MutableList<User> = mutableListOf()
@@ -49,11 +55,11 @@ class MainActivity : AppCompatActivity() {
             supportActionBar?.title = "Prueba de Ingreso"
 
             with(binding) {
-                customRecyclerView.init(
-                    true,
-                    userAdapter,
-                    LinearLayoutManager(this@MainActivity)
-                )
+                recyclerView.apply {
+                    setHasFixedSize(true)
+                    adapter = userAdapter
+                    layoutManager = LinearLayoutManager(this@MainActivity)
+                }
 
                 inputSearch.addTextChangedListener(object : TextWatcher {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
@@ -75,20 +81,20 @@ class MainActivity : AppCompatActivity() {
             }
 
             lifecycleScope.launch {
-                mUserViewModel.syncEvent.collectLatest {
+                mMainViewModel.uiEvent.collectLatest {
                     when (it) {
-                        is UserViewModel.SyncEvent.Syncing -> showLoading(true)
-                        is UserViewModel.SyncEvent.SyncFailed -> {
+                        is MainViewModel.SyncEvent.Syncing -> showLoading(true)
+                        is MainViewModel.SyncEvent.SyncFailed -> {
                             showLoading(false)
                             Log.e(TAG, it.msg)
                         }
-                        is UserViewModel.SyncEvent.SyncSuccessful -> showLoading(false)
+                        is MainViewModel.SyncEvent.SyncSuccessful -> showLoading(false)
                     }
                 }
             }
 
             lifecycleScope.launch {
-                mUserViewModel.getAllUsers().collectLatest {
+                mMainViewModel.getAllUsers().collectLatest {
                     listUsers = it.toMutableList()
                     finalListUsers.value = listUsers
                 }
@@ -97,9 +103,15 @@ class MainActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 finalListUsers.observe(this@MainActivity) {
                     userAdapter.setData(it.toMutableList())
-                    binding.customRecyclerView.showRecyclerView(it.size)
+                    when (it.isEmpty()) {
+                        true -> binding.textEmpty.visibility = View.VISIBLE
+                        false -> binding.textEmpty.visibility = View.GONE
+                    }
                 }
             }
+
+            // Syncronizamos los usuarios y validamos su existencia.
+            mMainViewModel.syncAndValidateUsers()
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Ops! something go wrong...", Toast.LENGTH_SHORT).show()

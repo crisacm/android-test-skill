@@ -16,5 +16,5 @@ interface PostDao {
     suspend fun getBy(idServer: Long): Post?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(mutableList: MutableList<Post>)
+    suspend fun insert(list: List<Post>)
 }

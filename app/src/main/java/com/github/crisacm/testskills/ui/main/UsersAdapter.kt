@@ -26,6 +26,10 @@ class UsersAdapter : RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
                 textPhone.text = user.phone
                 textEmail.text = user.email
 
+                card.setOnClickListener {
+                    _onItemClickListener?.let { it(user, position) }
+                }
+
                 buttonPosts.setOnClickListener {
                     _onItemClickListener?.let { it(user, position) }
                 }

@@ -16,5 +16,5 @@ interface UserDao {
     fun getAllOnFlow(): Flow<List<User>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(mutableList: MutableList<User>)
+    suspend fun insert(list: List<User>)
 }
